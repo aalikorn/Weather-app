@@ -36,7 +36,7 @@ class HomeViewController: UIViewController, HomeViewProtocol {
     private func setupUI() {
         view.backgroundColor = .white
         temperatureLabel.textColor = .black
-        temperatureLabel.font = .systemFont(ofSize: 32, weight: .bold)
+        temperatureLabel.font = .systemFont(ofSize: 70, weight: .bold)
         temperatureLabel.textAlignment = .center
         infoView.addSubview(temperatureLabel)
         

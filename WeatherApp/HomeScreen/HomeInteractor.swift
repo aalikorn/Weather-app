@@ -20,13 +20,10 @@ class HomeInteractor: HomeInteractorProtocol {
         guard let url = URL(string: "https://api.weatherstack.com/current?access_key=498f2fce1088103d8f2a1421c8717217&query=Moscow") else {
             return
         }
-        let task = URLSession.shared.dataTask(with: url) { [weak self] data, _, error in
-            if let error = error {
-                self?.presenter?.interactorDidFetchWeatherData(with: .failure(error))
-                return
-            }
-            
-            if let data = data {
+        
+        NetworkService.shared.fetchData(from: url) {[weak self] result in
+            switch result {
+            case .success(let data):
                 do {
                     let entity = try JSONDecoder().decode(HomeWeatherEntity.self, from: data)
                     self?.presenter?.interactorDidFetchWeatherData(with: .success(entity))
@@ -34,10 +31,12 @@ class HomeInteractor: HomeInteractorProtocol {
                 catch {
                     self?.presenter?.interactorDidFetchWeatherData(with: .failure(error))
                 }
+            case .failure(let error):
+                self?.presenter?.interactorDidFetchWeatherData(with: .failure(error))
+                return
             }
         }
-        
-        task.resume()
+    
     }
     
 }
