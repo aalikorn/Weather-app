@@ -27,6 +27,8 @@ class HomeInteractor: HomeInteractorProtocol {
             return
         }
         
+        print(url)
+        
         NetworkService.shared.fetchData(from: url) {[weak self] result in
             switch result {
             case .success(let data):

@@ -27,7 +27,8 @@ class HomePresenter: HomePresenterProtocol {
     func interactorDidFetchWeatherData(with result: Result<HomeWeatherEntity, any Error>) {
         switch result {
         case .success(let weatherData):
-            view?.updateTemperature(String(weatherData.current.temperature))
+            view?.updateInfo(temperature: String(weatherData.current.temperature), location: weatherData.location.name)
+            
         case .failure:
             view?.showError("Internal error :(")
         }
