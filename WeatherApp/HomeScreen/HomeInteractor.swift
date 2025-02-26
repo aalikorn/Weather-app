@@ -10,14 +10,20 @@ import Foundation
 protocol HomeInteractorProtocol {
     var presenter: HomePresenterProtocol? { get set }
     
-    func fetchWeatherData()
+    func fetchWeatherData(lat: Double, lon: Double)
+    func requestLocation()
 }
 
 class HomeInteractor: HomeInteractorProtocol {
     var presenter: (any HomePresenterProtocol)?
     
-    func fetchWeatherData() {
-        guard let url = URL(string: "https://api.weatherstack.com/current?access_key=498f2fce1088103d8f2a1421c8717217&query=Moscow") else {
+    init() {
+        LocationManager.shared.delegate = self
+    }
+    
+    func fetchWeatherData(lat: Double, lon: Double) {
+        
+        guard let url = URL(string: "https://api.weatherstack.com/current?access_key=498f2fce1088103d8f2a1421c8717217&query=\(lat),\(lon)") else {
             return
         }
         
@@ -38,5 +44,20 @@ class HomeInteractor: HomeInteractorProtocol {
         }
     
     }
+    
+    func requestLocation() {
+        LocationManager.shared.requestLocation()
+    }
+}
+
+extension HomeInteractor: LocationManagerDelegate {
+    func didUpdateLocation(latitude: Double, longitude: Double) {
+        fetchWeatherData(lat: latitude, lon: longitude)
+    }
+    
+    func didFailWithError(error: any Error) {
+        fetchWeatherData(lat: 55.76430624, lon: 48.72625452)
+    }
+    
     
 }

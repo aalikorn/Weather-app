@@ -18,7 +18,7 @@ class HomePresenter: HomePresenterProtocol {
     
     var interactor: (any HomeInteractorProtocol)? {
         didSet {
-            interactor?.fetchWeatherData()
+            interactor?.requestLocation()
         }
     }
     
